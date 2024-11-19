@@ -1,0 +1,60 @@
+{% extends "resume_app/base.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header text-center mb-4">
+        <h1>Contact Us</h1>
+        <p class="text-muted">We'd love to hear from you! Here are our contact details:</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <!-- Address Section -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Address</h5>
+                    <p class="card-text">1234 Elm Street<br>Springfield, USA</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phone Section -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Phone</h5>
+                    <p class="card-text">+1 (555) 123-4567</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Section -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Email</h5>
+                    <p class="card-text">
+                        <a href="mailto:info@company.com">info@company.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media Section -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Follow Us</h5>
+                    <p class="card-text">
+                        <a href="https://www.linkedin.com/company/example" target="_blank" class="d-block">LinkedIn</a>
+                        <a href="https://www.instagram.com/example" target="_blank" class="d-block">Instagram</a>
+                        <a href="https://twitter.com/example" target="_blank" class="d-block">Twitter</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

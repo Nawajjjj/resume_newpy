@@ -1,0 +1,83 @@
+{% extends "resume_app/base.html" %}
+
+{% block title %}Generated Resumes{% endblock %}
+
+{% block content %}
+<style>
+    /* Apply a professional font to the entire page */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #f4f7fa; /* Light background color */
+}
+
+/* Styling for the certificate card */
+.certificate-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient background for the description box */
+.description-box {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    border-radius: 8px;
+    color: black;
+}
+
+/* Title styling */
+.certificate-card h3 {
+    font-size: 1.5rem;
+    color: black;
+    font-weight: bold;
+}
+
+/* Padding and margin adjustments */
+.certificate-card .p-4 {
+    padding: 2rem;
+}
+
+/* Centered headings */
+h1, h3 {
+    text-align: center;
+}
+
+/* Text color for the description text */
+.description-box p {
+    font-size: 1rem;
+    color: black;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    .certificate-card {
+        padding: 1rem;
+    }
+
+    .description-box {
+        padding: 1rem;
+    }
+}
+
+</style>
+<div class="container">
+    <h1 class="text-center mb-4">Generated Resumes</h1>
+    <p class="text-muted text-center mb-4">Below are the details extracted from your certificates:</p>
+    <h1><strong>Description:</strong></h1>
+    {% for data in extracted_data %}
+    <div class="certificate-card mb-4 p-4 rounded shadow-sm">
+<!--        <h3 class="card-title">{{ data.certificate.certificate_file.name }}</h3>-->
+        <div class="description-box p-3 mt-3 bg-gradient text-white rounded">
+            <p>{{ data.des }}</p>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center">No certificates found.</p>
+    {% endfor %}
+
+    <!-- Button to download the resume as PDF -->
+    <div class="text-center mt-4">
+        <a href="{% url 'generate_resume' %}?download=pdf" class="btn btn-success btn-block">Download Resume as PDF</a>
+    </div>
+</div>
+{% endblock %}

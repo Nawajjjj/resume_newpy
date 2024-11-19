@@ -1,0 +1,138 @@
+{% extends "resume_app/base.html" %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- About Us Container -->
+    <div class="about-container p-5 mb-5 rounded shadow-lg bg-light">
+        <div class="header text-center mb-4">
+            <h1 class="display-4 text-primary">About Certificate Resume Builder</h1>
+            <p class="text-muted fs-5">Learn more about how our service helps you create professional resumes from your certificates.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card flip-card">
+                    <div class="card-inner">
+                        <div class="card-front bg-white p-4 rounded shadow">
+                            <h3 class="text-primary">What We Do</h3>
+                            <p>
+                                Our Certificate Resume Builder allows you to upload certificates and automatically generate a polished resume
+                                showcasing your achievements. Whether you're applying for jobs or further education, we make it easy to present
+                                your skills and accomplishments.
+                            </p>
+                        </div>
+                        <div class="card-back bg-info p-4 rounded shadow text-white">
+                            <h3 class="text-light">Get Started Today</h3>
+                            <p>
+                                Upload your certificates today and create a resume that stands out in the job market or education field!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<style>
+    /* General Styling */
+    body {
+        font-family: 'Poppins', Arial, sans-serif;
+        background-color: #f1f3f5;
+    }
+
+    .about-container {
+        background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+    }
+
+    /* Header Styling */
+    .header h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .header p {
+        font-size: 1.1rem;
+        color: #6c757d;
+    }
+
+    /* Card Flip Effect */
+    .flip-card {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        height: 350px;
+        margin: 0 auto;
+        perspective: 1000px;
+    }
+
+    .card-inner {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    .card-front {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .card-back {
+        background-color: #17a2b8;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        transform: rotateY(180deg);
+    }
+
+    .card-back h3 {
+        color: #ffffff;
+    }
+
+    .card-front h3 {
+        color: #007bff;
+    }
+
+    /* Footer Styling for About Page */
+    footer {
+        background-color: #343a40;
+        color: #ffffff;
+        text-align: center;
+        padding: 20px 0;
+        margin-top: 40px;
+        font-size: 0.9rem;
+    }
+
+    footer p {
+        margin: 0;
+    }
+
+    footer a {
+        color: #ffc107;
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+</style>

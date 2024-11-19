@@ -1,0 +1,123 @@
+{% extends 'resume_app/base.html' %}
+
+{% block title %}Home - Certificate Resume Builder{% endblock %}
+{% load static %}
+{% block content %}
+<style>
+    /* Button Styles */
+.btn-custom {
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-custom:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Flip Card Styles */
+.flip-card {
+    perspective: 1000px;
+    height: 200px;
+    position: relative;
+}
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+.flip-card-front {
+    background: #f8f9fa;
+}
+.flip-card-back {
+    background: #007bff;
+    color: #fff;
+    transform: rotateY(180deg);
+}
+
+/* Features Section */
+.feature-card {
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feature-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+</style>
+<div class="container mt-5">
+    <!-- Header Section -->
+    <div class="header text-center mb-5">
+        <h1 class="text-primary fw-bold">Welcome to Certificate Resume Builder</h1>
+        <p class="text-muted">Upload your certificates, choose a template, and generate your professional resume effortlessly.</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-center gap-3 mb-5">
+        <a href="{% url 'upload_certificate' %}" class="btn btn-primary btn-lg shadow-sm">Upload Certificate</a>
+        <a href="{% url 'certificate_list' %}" class="btn btn-secondary btn-lg shadow-sm">View Certificates</a>
+        <a href="{% url 'generate_resume' %}" class="btn btn-success btn-lg shadow-sm">Generate Resume</a>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="how-it-works my-5">
+        <h2 class="text-center text-primary fw-bold mb-4">How It Works</h2>
+        <div class="row g-4">
+            <!-- Step Cards -->
+            {% for step in steps %}
+            <div class="col-md-3">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front d-flex flex-column align-items-center justify-content-center">
+                            <div class="icon display-4 mb-3">{{ step.icon }}</div>
+                            <h4 class="fw-bold text-primary">{{ step.title }}</h4>
+                            <p class="text-muted">{{ step.description }}</p>
+                        </div>
+                        <div class="flip-card-back d-flex flex-column align-items-center justify-content-center bg-primary text-white">
+                            <h4 class="fw-bold">{{ step.title }}</h4>
+                            <p>{{ step.details }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features my-5 bg-light py-5">
+        <h2 class="text-center text-primary fw-bold mb-4">Our Features</h2>
+        <div class="row g-4">
+            {% for feature in features %}
+            <div class="col-md-4">
+                <div class="feature-card p-4 text-center border shadow-sm">
+                    <i class="display-4 mb-3 text-primary">{{ feature.icon }}</i>
+                    <h4 class="fw-bold">{{ feature.title }}</h4>
+                    <p class="text-muted">{{ feature.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Certificate Resume Builder{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #212529;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #ffc107 !important;
+        }
+
+        .navbar-toggler {
+            border-color: #ffffff;
+        }
+
+        .navbar-toggler-icon {
+            background-color: #ffffff;
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: #ffc107;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Button Styling */
+        .btn-custom {
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+<!--        /* Hover Effect for Cards */-->
+<!--        .card {-->
+<!--            perspective: 1000px;-->
+<!--            transition: transform 0.3s;-->
+<!--        }-->
+
+<!--        .card:hover {-->
+<!--            transform: rotateY(180deg);-->
+<!--        }-->
+
+        .card-front, .card-back {
+            position: absolute;
+            backface-visibility: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Additional Styling for the Header */
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">CertiResume</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    <!-- Links visible to logged-in users -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'upload_certificate' %}">Upload Certificate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'certificate_list' %}">View Certificates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'generate_resume' %}">Generate Resume</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <!-- Links visible to guests -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Content Block -->
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 CertiResume. All rights reserved.
+</footer>
+
+<!-- Bootstrap JS (optional) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
