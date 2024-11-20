@@ -1,42 +1,48 @@
 {% extends "resume_app/base.html" %}
-
 {% block title %}Contact Us{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="header text-center mb-4">
-        <h1>Contact Us</h1>
+<div class="container mt-5">
+    <!-- Header Section -->
+    <div class="header text-center mb-5">
+        <h1 class="text-primary fw-bold">Contact Us</h1>
         <p class="text-muted">We'd love to hear from you! Here are our contact details:</p>
     </div>
 
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <!-- Address Section -->
         <div class="col">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="card-title">Address</h5>
-                    <p class="card-text">1234 Elm Street<br>Springfield, USA</p>
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-map-marker-alt"></i> Address
+                    </h5>
+                    <p class="card-text">Lovely Professional University<br>Phagwara, Punjab</p>
                 </div>
             </div>
         </div>
 
         <!-- Phone Section -->
         <div class="col">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="card-title">Phone</h5>
-                    <p class="card-text">+1 (555) 123-4567</p>
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-phone-alt"></i> Phone
+                    </h5>
+                    <p class="card-text">7379255333</p>
                 </div>
             </div>
         </div>
 
         <!-- Email Section -->
         <div class="col">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="card-title">Email</h5>
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-envelope"></i> Email
+                    </h5>
                     <p class="card-text">
-                        <a href="mailto:info@company.com">info@company.com</a>
+                        <a href="mailto:Nawazzz2004@gmail.com" class="text-decoration-none text-primary">Nawazzz2004@gmail.com</a>
                     </p>
                 </div>
             </div>
@@ -44,17 +50,103 @@
 
         <!-- Social Media Section -->
         <div class="col">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="card-title">Follow Us</h5>
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-share-alt"></i> Follow Us
+                    </h5>
                     <p class="card-text">
-                        <a href="https://www.linkedin.com/company/example" target="_blank" class="d-block">LinkedIn</a>
-                        <a href="https://www.instagram.com/example" target="_blank" class="d-block">Instagram</a>
-                        <a href="https://twitter.com/example" target="_blank" class="d-block">Twitter</a>
+                        <a href="https://www.linkedin.com/in/nawaj-ahmed-4b09a0251/" target="_blank" class="d-block text-decoration-none text-primary">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        <a href="https://www.instagram.com/shaikh_nawazzz/" target="_blank" class="d-block text-decoration-none text-primary">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                        <a href="https://x.com/shaikh_nawazzz" target="_blank" class="d-block text-decoration-none text-primary">
+                            <i class="fab fa-x-twitter"></i> Twitter
+                        </a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Footer Section (fixed to the bottom) -->
+<footer class="footer mt-auto py-3 bg-dark text-white">
+    <div class="container text-center">
+        <p>&copy; 2024 CertiResume Generator. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- Custom Styles -->
+<style>
+    .header h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #007bff;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #007bff;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+
+    .text-decoration-none {
+        text-decoration: none;
+    }
+
+    .text-decoration-none:hover {
+        text-decoration: underline;
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    /* Social Media Icon Styling */
+    .fab {
+        margin-right: 8px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+
+<!-- Font Awesome CDN for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 {% endblock %}

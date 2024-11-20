@@ -6,6 +6,7 @@
     <title>{% block title %}Certificate Resume Builder{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
         /* General Body Styling */
@@ -20,19 +21,17 @@
         /* Navbar Styling */
         .navbar {
             background-color: #343a40;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand, .nav-link {
             color: #ffffff !important;
             font-weight: bold;
+            transition: color 0.3s ease;
         }
 
         .navbar-brand:hover, .nav-link:hover {
             color: #ffc107 !important;
-        }
-
-        .navbar-toggler {
-            border-color: #ffffff;
         }
 
         .navbar-toggler-icon {
@@ -48,7 +47,7 @@
 
         /* Footer Styling */
         footer {
-            background-color: #343a40;
+            background: linear-gradient(45deg, #343a40, #495057);
             color: #ffffff;
             text-align: center;
             padding: 20px 0;
@@ -63,10 +62,22 @@
         footer a {
             color: #ffc107;
             text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.1rem;
         }
 
         footer a:hover {
             text-decoration: underline;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            color: #ffffff;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #ffc107;
         }
 
         /* Button Styling */
@@ -84,36 +95,32 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-<!--        /* Hover Effect for Cards */-->
-<!--        .card {-->
-<!--            perspective: 1000px;-->
-<!--            transition: transform 0.3s;-->
-<!--        }-->
-
-<!--        .card:hover {-->
-<!--            transform: rotateY(180deg);-->
-<!--        }-->
-
-        .card-front, .card-back {
-            position: absolute;
-            backface-visibility: hidden;
-            transition: transform 0.3s ease-in-out;
+        /* Card Styling */
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .card-back {
-            transform: rotateY(180deg);
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Additional Styling for the Header */
+        /* Header Section */
         .header h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: bold;
             color: #007bff;
+            text-align: center;
+            margin-bottom: 10px;
         }
 
         .header p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #6c757d;
+            text-align: center;
+            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -139,7 +146,6 @@
                 </li>
 
                 {% if user.is_authenticated %}
-                    <!-- Links visible to logged-in users -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'upload_certificate' %}">Upload Certificate</a>
                     </li>
@@ -153,7 +159,6 @@
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     </li>
                 {% else %}
-                    <!-- Links visible to guests -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
@@ -168,15 +173,22 @@
 
 <!-- Content Block -->
 <div class="container mt-4">
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
 
 <!-- Footer -->
 <footer>
-    <p>&copy; 2024 CertiResume. All rights reserved.
+    <p>&copy; 2024 CertiResume. All rights reserved.</p>
+    <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
 </footer>
 
-<!-- Bootstrap JS (optional) -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 </body>

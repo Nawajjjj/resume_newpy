@@ -3,24 +3,121 @@
 {% block title %}Home - Certificate Resume Builder{% endblock %}
 {% load static %}
 {% block content %}
+<!-- Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pO1Q+PdL8xA8+9zQ8Rt9KTKwGHMFgZ4V1W5nS31ZbjvPQx8v59Ow2thymQ+jKJGkKezvG5MZAFqgfT+5S4A5+g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
-    /* Button Styles */
-.btn-custom {
-    border-radius: 25px;
-    padding: 10px 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* General Styles */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #f9f9fb;
+    margin: 0;
+    padding: 0;
+    color: #212529;
 }
-.btn-custom:hover {
-    transform: scale(1.1);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+/* Header Section (Unchanged as per your request) */
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #007bff;
+}
+
+.header p {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+/* Action Buttons */
+.action-buttons a {
+    border-radius: 25px;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.action-buttons a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons a:active {
+    background-color: #0056b3;
+}
+
+/* Features Section */
+.features {
+    background-color: #f1f1f1;
+    padding: 60px 0;
+}
+
+.features h2 {
+    font-size: 2.5rem;
+    color: #007bff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+}
+
+.feature-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.feature-item {
+    width: 280px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transform: scale(0.95);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.feature-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.feature-item h3{
+color : #007bff;
+
+}
+.feature-item p {
+    color: black;
+    transition: color 0.3s ease;
+}
+
+.feature-item:hover h3,
+.feature-item:hover p {
+    color: #ffffff;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 20px;
 }
 
 /* Flip Card Styles */
 .flip-card {
     perspective: 1000px;
-    height: 200px;
+    height: 300px;
     position: relative;
+    width: 100%;
+    transition: transform 0.6s ease;
 }
+
 .flip-card-inner {
     position: relative;
     width: 100%;
@@ -29,9 +126,11 @@
     transform-style: preserve-3d;
     transition: transform 0.6s ease;
 }
+
 .flip-card:hover .flip-card-inner {
     transform: rotateY(180deg);
 }
+
 .flip-card-front,
 .flip-card-back {
     position: absolute;
@@ -43,57 +142,97 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
 }
+
 .flip-card-front {
-    background: #f8f9fa;
+    background: #ffffff;
+    color: #007bff;
 }
+
 .flip-card-back {
     background: #007bff;
-    color: #fff;
+    color: #ffffff;
     transform: rotateY(180deg);
 }
 
-/* Features Section */
-.feature-card {
-    border-radius: 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.flip-card:hover .flip-card-front h3,
+.flip-card:hover .flip-card-front p {
+    color: #ffffff;
 }
-.feature-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+.flip-card:hover .flip-card-back h3,
+.flip-card:hover .flip-card-back p {
+    color: #ffffff;
 }
+
+/* How It Works Section */
+.how-it-works {
+    padding: 60px 0;
+}
+
+.how-it-works h2 {
+    font-size: 2.5rem;
+    color: #007bff;
+    font-weight: 600;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .feature-item {
+        width: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    .flip-card {
+        height: 200px;
+    }
+
+    .feature-item {
+        width: 100%;
+    }
+
+    .header h1 {
+        font-size: 2.5rem;
+    }
+}
+
 </style>
+
 <div class="container mt-5">
-    <!-- Header Section -->
+    <!-- Header Section (Unchanged) -->
     <div class="header text-center mb-5">
-        <h1 class="text-primary fw-bold">Welcome to Certificate Resume Builder</h1>
+        <h1 class="text-primary fw-bold">Welcome to CertiResume Generator</h1>
         <p class="text-muted">Upload your certificates, choose a template, and generate your professional resume effortlessly.</p>
     </div>
 
     <!-- Action Buttons -->
-    <div class="d-flex justify-content-center gap-3 mb-5">
+    <div class="d-flex justify-content-center gap-4 mb-5 action-buttons">
         <a href="{% url 'upload_certificate' %}" class="btn btn-primary btn-lg shadow-sm">Upload Certificate</a>
         <a href="{% url 'certificate_list' %}" class="btn btn-secondary btn-lg shadow-sm">View Certificates</a>
         <a href="{% url 'generate_resume' %}" class="btn btn-success btn-lg shadow-sm">Generate Resume</a>
     </div>
 
     <!-- How It Works Section -->
-    <div class="how-it-works my-5">
-        <h2 class="text-center text-primary fw-bold mb-4">How It Works</h2>
+    <div class="how-it-works">
+        <h2 class="fw-bold">How It Works</h2>
         <div class="row g-4">
             <!-- Step Cards -->
             {% for step in steps %}
             <div class="col-md-3">
                 <div class="flip-card">
                     <div class="flip-card-inner">
-                        <div class="flip-card-front d-flex flex-column align-items-center justify-content-center">
+                        <div class="flip-card-front">
                             <div class="icon display-4 mb-3">{{ step.icon }}</div>
-                            <h4 class="fw-bold text-primary">{{ step.title }}</h4>
+                            <h4 class="fw-bold">{{ step.title }}</h4>
                             <p class="text-muted">{{ step.description }}</p>
                         </div>
-                        <div class="flip-card-back d-flex flex-column align-items-center justify-content-center bg-primary text-white">
+                        <div class="flip-card-back bg-primary text-white">
                             <h4 class="fw-bold">{{ step.title }}</h4>
                             <p>{{ step.details }}</p>
                         </div>
@@ -105,19 +244,28 @@
     </div>
 
     <!-- Features Section -->
-    <div class="features my-5 bg-light py-5">
-        <h2 class="text-center text-primary fw-bold mb-4">Our Features</h2>
-        <div class="row g-4">
+    <section class="features">
+        <h2 class="fw-bold">Our Features</h2>
+        <div class="feature-list">
+            <!-- Feature Items -->
             {% for feature in features %}
-            <div class="col-md-4">
-                <div class="feature-card p-4 text-center border shadow-sm">
-                    <i class="display-4 mb-3 text-primary">{{ feature.icon }}</i>
-                    <h4 class="fw-bold">{{ feature.title }}</h4>
-                    <p class="text-muted">{{ feature.description }}</p>
+            <div class="feature-item">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="feature-icon {{ feature.icon }}"></i>
+                            <h3>{{ feature.title }}</h3>
+                            <p>{{ feature.description }}</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>{{ feature.details }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-    </div>
+    </section>
 </div>
+
 {% endblock %}

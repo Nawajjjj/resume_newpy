@@ -28,9 +28,30 @@ def home(request):
     ]
 
     features = [
-        {"icon": "🚀", "title": "OCR Technology", "description": "Accurate extraction of details from certificates."},
-        {"icon": "📋", "title": "Multiple Templates", "description": "Wide variety of ATS-friendly templates."},
-        {"icon": "💾", "title": "Data Storage", "description": "Save and manage your certificates securely."},
+        {
+            'icon': 'fas fa-file-alt',
+            'title': 'OCR- Powered Resume Ceration',
+            'description': 'Our advanced OCR analyzes your certificates and creates tailored, professional resumes in minutes.',
+            'details': 'Our OCR feature provides a seamless, efficient experience in resume creation.'
+        },
+        {
+            'icon': 'fas fa-cloud-upload-alt',
+            'title': 'OCR-Powered Data Extraction',
+            'description': 'Our cutting-edge OCR technology accurately extracts information from your certificates, saving your time and effort',
+            'details': 'Fast and reliable OCR extraction for your certificates!'
+        },
+        {
+            'icon': 'fas fa-sync-alt',
+            'title': 'Technology Highlighting ',
+            'description': 'Automatically identify and highlight key Technology from your uploaded certificates to match job requirements ',
+            'details': 'Identify and emphasize essential technology effortlessly!'
+        },
+        {
+            'icon': 'fas fa-download',
+            'title': 'Quick Turnaround ',
+            'description': 'Generates your professional resume in less than 15 minutes, perfect for last-minute applications',
+            'details': 'Get a professional resume ready in no time!'
+        }
     ]
 
     return render(request, 'resume_app/home.html', {'steps': steps, 'features': features})
