@@ -1,21 +1,49 @@
 {% extends "resume_app/base.html" %}
 
 {% block title %}Login{% endblock %}
-
+{% load custom_filters %}
 {% block content %}
-<div class="container">
-    <div class="header text-center mb-4">
-        <h1>Login</h1>
+<div class="login-container">
+    <div class="header">
+        <h1>Welcome Back</h1>
+        <p>Log in to your account</p>
     </div>
+
     <form method="post">
         {% csrf_token %}
-        <div class="mb-3">
-            {{ form.as_p }}
+        {% if form.errors %}
+            <div class="error-messages">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p class="error">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            {{ form.username }}
         </div>
-        <button type="submit" class="btn btn-primary w-100">Login</button>
+
+        <div class="form-group">
+            {{ form.password }}
+        </div>
+
+        <div class="form-actions">
+            <label>
+                <input type="checkbox" name="remember_me"> Remember Me
+            </label>
+            <a href="#">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+
+        <p class="signup-link">
+            Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
+        </p>
     </form>
-    <p class="text-center mt-3">
-        Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
-    </p>
 </div>
 {% endblock %}

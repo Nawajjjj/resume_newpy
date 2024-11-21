@@ -3,20 +3,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CertificateUploadForm, UserInformationForm
+from .forms import CertificateUploadForm, UserInformationForm, CustomUserCreationForm
 from .models import Certificate
-import pytesseract
-import pdfplumber
-# import spacy
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm
 import os
 import re
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from io import BytesIO
 from .utils import extract_text_from_pdf, extract_information
-
-# Load NLP model
-# nlp = spacy.load('en_core_web_sm')
 
 
 def home(request):
@@ -28,34 +25,13 @@ def home(request):
     ]
 
     features = [
-        {
-            'icon': 'fas fa-file-alt',
-            'title': 'OCR- Powered Resume Ceration',
-            'description': 'Our advanced OCR analyzes your certificates and creates tailored, professional resumes in minutes.',
-            'details': 'Our OCR feature provides a seamless, efficient experience in resume creation.'
-        },
-        {
-            'icon': 'fas fa-cloud-upload-alt',
-            'title': 'OCR-Powered Data Extraction',
-            'description': 'Our cutting-edge OCR technology accurately extracts information from your certificates, saving your time and effort',
-            'details': 'Fast and reliable OCR extraction for your certificates!'
-        },
-        {
-            'icon': 'fas fa-sync-alt',
-            'title': 'Technology Highlighting ',
-            'description': 'Automatically identify and highlight key Technology from your uploaded certificates to match job requirements ',
-            'details': 'Identify and emphasize essential technology effortlessly!'
-        },
-        {
-            'icon': 'fas fa-download',
-            'title': 'Quick Turnaround ',
-            'description': 'Generates your professional resume in less than 15 minutes, perfect for last-minute applications',
-            'details': 'Get a professional resume ready in no time!'
-        }
+        {'icon': 'fas fa-file-alt', 'title': 'OCR-Powered Resume Creation', 'description': 'Our advanced OCR analyzes your certificates and creates tailored, professional resumes in minutes.', 'details': 'Seamless, efficient resume creation.'},
+        {'icon': 'fas fa-cloud-upload-alt', 'title': 'OCR-Powered Data Extraction', 'description': 'Our cutting-edge OCR accurately extracts certificate information, saving you time.', 'details': 'Fast and reliable OCR extraction!'},
+        {'icon': 'fas fa-sync-alt', 'title': 'Technology Highlighting', 'description': 'Automatically identify and highlight key technologies to match job requirements.', 'details': 'Emphasize essential technologies effortlessly!'},
+        {'icon': 'fas fa-download', 'title': 'Quick Turnaround', 'description': 'Generates your professional resume in less than 15 minutes.', 'details': 'Perfect for last-minute applications!'}
     ]
 
     return render(request, 'resume_app/home.html', {'steps': steps, 'features': features})
-
 
 
 @login_required
@@ -64,14 +40,15 @@ def upload_certificate(request):
         form = CertificateUploadForm(request.POST, request.FILES)
         if form.is_valid():
             certificate = form.save(commit=False)
-            certificate.user = request.user  # Ensure the logged-in user is assigned to the certificate
+            certificate.user = request.user
             certificate.save()
-            return redirect('certificate_list')  # Redirect to certificate list or any other page
+            return redirect('certificate_list')
     else:
         form = CertificateUploadForm()
     return render(request, 'resume_app/upload_certificate.html', {'form': form})
 
 
+@login_required
 def certificate_list(request):
     certificates = Certificate.objects.filter(user=request.user)
     return render(request, 'resume_app/certificate_list.html', {'certificates': certificates})
@@ -100,24 +77,20 @@ def wrap_text(text, p, font, font_size, width):
     return lines
 
 
+@login_required
 def generate_resume(request):
-    # Get all certificates related to the user
     certificates = Certificate.objects.filter(user=request.user)
 
-    # Redirect if no certificates exist
     if not certificates:
         return redirect('upload_certificate')
 
-        # Initialize a list to hold extracted data for the resume
     extracted_data = []
 
     for certificate in certificates:
-        # Extract and clean text from certificate PDF
         text = extract_text_from_pdf(certificate.certificate_file.path)
         clean_description = clean_text(text)
         extracted_info = extract_information(clean_description)
 
-        # Append data for each certificate
         extracted_data.append({
             'certificate': certificate,
             'des': clean_description,
@@ -128,144 +101,83 @@ def generate_resume(request):
             'skills': extracted_info.get('skills', []),
         })
 
-    # Check if the user wants to download the resume as PDF
     if request.GET.get('download') == 'pdf':
-        if request.method == 'POST':
-            form = UserInformationForm(request.POST)
-            if form.is_valid():
-                user_data = form.cleaned_data
-                name = user_data['name']
-                phone = user_data['phone']
-                email = user_data['email']
-                linkedin = user_data.get('linkedin', '')
-                gmail = user_data.get('gmail', '')
+        form = UserInformationForm(request.POST or None)
+        if request.method == 'POST' and form.is_valid():
+            user_data = form.cleaned_data
+            name, phone, email = user_data['name'], user_data['phone'], user_data['email']
+            linkedin, gmail = user_data.get('linkedin', ''), user_data.get('gmail', '')
 
-                # Create a PDF buffer in memory
-                buffer = BytesIO()
-                p = canvas.Canvas(buffer, pagesize=letter)
-                width, height = letter
-                y_position = height - 100  # Starting position from top
+            buffer = BytesIO()
+            p = canvas.Canvas(buffer, pagesize=letter)
+            width, height = letter
+            y_position = height - 100
 
-                # Set up the font for the PDF
-                font = "Helvetica"
-                font_size = 12
+            font, font_size = "Helvetica", 12
+            p.setFont(font, font_size)
+
+            p.setFont("Helvetica-Bold", 16)
+            p.drawString(100, y_position, name)
+            y_position -= 20
+            p.setFont(font, font_size)
+            p.drawString(100, y_position, f"Phone: {phone}")
+            y_position -= 20
+            p.drawString(100, y_position, f"Email: {email}")
+            y_position -= 20
+            if linkedin:
+                p.drawString(100, y_position, f"LinkedIn: {linkedin}")
+                y_position -= 20
+            if gmail:
+                p.drawString(100, y_position, f"Gmail: {gmail}")
+                y_position -= 20
+
+            y_position -= 40
+
+            for idx, data in enumerate(extracted_data, 1):
+                p.setFont("Helvetica-Bold", 14)
+                p.drawString(100, y_position, f"Certificate {idx}:")
+                y_position -= 20
+
+                description_lines = wrap_text(data['des'], p, font, font_size, width - 200)
                 p.setFont(font, font_size)
+                for line in description_lines:
+                    p.drawString(100, y_position, line)
+                    y_position -= 14
 
-                # Add personal information to the PDF
-                p.setFont("Helvetica-Bold", 16)
-                p.drawString(100, y_position, f"{name}")  # Name in larger font
                 y_position -= 20
-                p.setFont(font, font_size)
-                p.drawString(100, y_position, f"Phone: {phone}")
-                y_position -= 20
-                p.drawString(100, y_position, f"Email: {email}")
-                y_position -= 20
-                if linkedin:
-                    p.drawString(100, y_position, f"LinkedIn: {linkedin}")
-                    y_position -= 20
-                if gmail:
-                    p.drawString(100, y_position, f"Gmail: {gmail}")
-                    y_position -= 20
 
-                y_position -= 40  # Add some space before certificates section
+                if y_position < 100:
+                    p.showPage()
+                    p.setFont(font, font_size)
+                    y_position = height - 100
 
-                # Add certificate details
-                for idx, data in enumerate(extracted_data, 1):
-                    certificate_name = os.path.basename(data['certificate'].certificate_file.name)
-                    p.setFont("Helvetica-Bold", 14)
-                    p.drawString(100, y_position, f"Certificate {idx}:")
-                    y_position -= 20
+            p.showPage()
+            p.save()
 
-                    # Wrap description text and print it
-                    description_lines = wrap_text(data['des'], p, font, font_size, width - 200)
-                    p.setFont(font, font_size)  # Reset font size for description
-                    for line in description_lines:
-                        p.drawString(100, y_position, f"{line}")
-                        y_position -= 14
+            buffer.seek(0)
+            response = HttpResponse(buffer, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="generated_resume.pdf"'
+            return response
 
-                    y_position -= 20  # Add space after each certificate
+        return render(request, 'resume_app/generate_resume_form.html', {'form': form, 'extracted_data': extracted_data})
 
-                    # Create a new page if content exceeds bounds
-                    if y_position < 100:
-                        p.showPage()  # Create a new page
-                        p.setFont(font, font_size)
-                        y_position = height - 100  # Reset position for new page
-
-                # Finalize the PDF
-                p.showPage()  # End the document
-                p.save()
-
-                # Create the response to download the PDF
-                buffer.seek(0)
-                response = HttpResponse(buffer, content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename="generated_resume.pdf"'
-                return response
-        else:
-            form = UserInformationForm()  # Initialize the form if GET request
-
-        context = {
-            'form': form,
-            'extracted_data': extracted_data
-        }
-        return render(request, 'resume_app/generate_resume_form.html', context)
-
-    # If not downloading PDF, render the resume page
-    context = {'extracted_data': extracted_data}
-    return render(request, 'resume_app/generated_resume.html', context)
-
-
-def extract_text_from_certificate(certificate):
-    # Open the certificate file and extract text using OCR
-    if certificate.certificate_file.name.endswith('.pdf'):
-        with pdfplumber.open(certificate.certificate_file) as pdf:
-            text = ''
-            for page in pdf.pages:
-                text += page.extract_text()
-            return text
-    else:
-        # Use OCR for image files
-        text = pytesseract.image_to_string(certificate.certificate_file.path)
-        return text
-
-
-def extract_course_name(doc):
-    # You can improve this to specifically extract the course name
-    for ent in doc.ents:
-        if ent.label_ == 'ORG':  # Course might be treated as a proper noun or organization
-            return ent.text
-    return "Not Found"
-
-
-def extract_institution_name(doc):
-    # You can improve this to specifically extract the institution name
-    for ent in doc.ents:
-        if ent.label_ == 'ORG':  # Likely the institution is identified as an organization
-            return ent.text
-    return "Not Found"
-
-
-def extract_date(doc):
-    # Extract date (if any)
-    for ent in doc.ents:
-        if ent.label_ == 'DATE':
-            return ent.text
-    return "Not Found"
+    return render(request, 'resume_app/generated_resume.html', {'extracted_data': extracted_data})
 
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # After successful signup, redirect to login page
+            return redirect('login')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'resume_app/signup.html', {'form': form})
 
 
 @login_required
 def profile(request):
-    return redirect('upload_certificate')  # Redirect to your desired page after login
+    return redirect('upload_certificate')
 
 
 def about(request):
@@ -278,18 +190,30 @@ def contact(request):
 
 @login_required
 def delete_certificate(request, cert_id):
-    # Ensure the certificate exists and is owned by the current user
     certificate = get_object_or_404(Certificate, id=cert_id, user=request.user)
-
-    # Handle the deletion only if the request method is POST
     if request.method == 'POST':
-        certificate.delete()  # Delete the certificate
-        return redirect('certificate_list')  # Redirect to the certificate list page after deletion
-
-    # If the method is GET, render the confirmation page
+        certificate.delete()
+        return redirect('certificate_list')
     return render(request, 'resume_app/confirm_delete.html', {'certificate': certificate})
 
 
 def logout_view(request):
     logout(request)
     return redirect("/")
+
+def custom_login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')  # Replace 'home' with your desired redirect page
+            else:
+                form.add_error(None, "Invalid username or password")
+    else:
+        form = LoginForm()
+
+    return render(request, "resume_app/login.html", {'form': form})

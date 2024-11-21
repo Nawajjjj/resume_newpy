@@ -17,4 +17,5 @@ urlpatterns = [
     path('generate_resume/', views.generate_resume, name='generate_resume'),
     path('profile/', views.profile, name='profile'),  # Add this line for profile view
     path('generate_resume/', views.generate_resume, name='generate_resume'),
+    path('login/', views.custom_login_view, name='login'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
